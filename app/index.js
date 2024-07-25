@@ -5,14 +5,12 @@ import {
   FlatList,
   StyleSheet,
   Dimensions,
-  ActivityIndicator,
   Text,
   ScrollView,
-  Platform,
   TouchableOpacity,
 } from "react-native";
-import { Video } from "expo-av";
 import { videos } from "../components/videos";
+import VideoPlayer from "../components/VideoPlayer";
 
 export default function VideoScreen() {
   const [selectedVideo, setSelectedVideo] = useState(videos[0].url);
@@ -59,43 +57,9 @@ export default function VideoScreen() {
     }
   };
 
-  const handleVideoLoad = () => {
-    setIsLoaded(true);
-    setIsBuffering(false);
-  };
-
-  const handleVideoBuffer = () => {
-    setIsBuffering(true);
-  };
-
-  const handleVideoError = (error) => {
-    console.error("Video error:", error);
-    setError("Video loading error.");
-  };
-
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.videoContainer}>
-        <Video
-          ref={videoRef}
-          source={{ uri: selectedVideo }}
-          useNativeControls
-          style={styles.video}
-          shouldPlay
-          isLooping
-          onLoad={handleVideoLoad}
-          onBuffer={handleVideoBuffer}
-          onError={handleVideoError}
-        />
-        {isBuffering && (
-          <ActivityIndicator
-            size="large"
-            color="#0000ff"
-            style={styles.loader}
-          />
-        )}
-        {error && <Text style={styles.errorText}>{error}</Text>}
-      </View>
+      <VideoPlayer selectedVideo={selectedVideo} />
 
       <FlatList
         data={videos}
